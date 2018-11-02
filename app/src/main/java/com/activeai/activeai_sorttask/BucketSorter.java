@@ -1,5 +1,6 @@
 package com.activeai.activeai_sorttask;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class BucketSorter implements Sorter{
@@ -9,36 +10,46 @@ public class BucketSorter implements Sorter{
 
     public BucketSorter(ArrayList<Integer> arrayList) {
         this.arrayList = arrayList;
-         HeapSort(arrayList);
+         BubbleSort(arrayList);
     }
 
 
     @Override
     public void HeapSort(ArrayList<Integer> array) {
        System.out.print("HeapSort"+array.size());
-
-        ArrayList<Integer> b=new ArrayList<>(array.size());
-
-        for (int i=0; i<array.size(); i++)
-        {
-            int bi = array.size()*array.get(i); // Index in bucket
-            b.get(bi).push_back(arr[i]);
-        }
-
-        // 3) Sort individual buckets
-        for (int i=0; i<n; i++)
-            sort(b[i].begin(), b[i].end());
-
-        // 4) Concatenate all buckets into arr[]
-        int index = 0;
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < b[i].size(); j++)
-                arr[index++] = b[i][j];
-        sortObserver.onArrayUpdate(arrayList);
     }
+
 
     @Override
-    public void BubbleSort(ArrayList<Integer> arrayList) {
+    public void BubbleSort(ArrayList<Integer> array) {
         System.out.print("BubbleSort");
+
+        ArrayList<ArrayList<Integer>> buckets = new ArrayList<>();
+        for(int i = 0; i < array.size(); i++)
+        {
+            buckets.add(new ArrayList<Integer>());
+        }
+        for(int i = 0; i < array.size(); i++)
+        {
+            int check = array.size();
+            int arrayToPlace = 0;
+            boolean greater = true;
+            while(greater)
+            {
+                if(array.get(i) > check)
+                {
+                    check = check * array.size();
+                    arrayToPlace++;
+                }
+                else
+                {
+                    buckets.get(arrayToPlace-1).add(array.get(i));
+                    greater = false;
+                }
+                sortObserver.onArrayUpdate(buckets);
+            }
+
+        }
     }
+
 }
