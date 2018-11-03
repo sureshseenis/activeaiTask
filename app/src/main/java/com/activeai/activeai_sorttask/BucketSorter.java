@@ -43,10 +43,14 @@ public class BucketSorter implements Sorter{
                 }
                 else
                 {
-                    buckets.get(arrayToPlace-1).add(array.get(i));
-                    greater = false;
+                    try {
+                        buckets.get(arrayToPlace).add(array.get(i));
+                        greater = false;
+                    }catch (ArrayIndexOutOfBoundsException e){
+                       e.printStackTrace();
+                    }
                 }
-                sortObserver.onArrayUpdate(buckets);
+                //sortObserver.onArrayUpdate(buckets);
             }
 
         }
